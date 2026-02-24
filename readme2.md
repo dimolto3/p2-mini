@@ -5,52 +5,57 @@
 ---
 
 ## 1. 📝 프로젝트 개요
-* **목적**: 올림픽 개최국의 성적 향상 유무와 지속성, 종목별 편차 분석
+* **목적**: 올림픽 개최국의 성적 향상 유무와 지속성, 종목별 편차, 경제적 수준(GDP)에 따른 시너지 분석
 * **기간**: 2026.02.23 - 2026.02.24
-* **데이터**: 120년간의 올림픽 선수 및 메달 획득 데이터 (`athlete_events.csv`)
+* **데이터**: 120년간의 올림픽 선수 및 메달 획득 데이터 (`athlete_events.csv`), 1960년부터 국가별/연도별 GDP 데이터 ('world_gdp.csv'), 국가별 인구 데이터 ('world_population.csv')
 * **사용 기술**: Python, Pandas, Matplotlib, Seaborn
 
 ---
 ## 2. 🛠️ 데이터 전처리
-### 1. 기존 데이터와 변경 후 행/열 수: 
-  - 행: 271,116 개
-  - 열: 15 개
+### 2-1. 기존 데이터와 변경 후 행/열 수: 
+  - 행: 271,116 개 &nbsp;&nbsp;-중복값 제거->&nbsp;&nbsp; 269,731 개
+  - 열: 15 개  &nbsp;&nbsp; -열 추가-> &nbsp;&nbsp; 19 개
 
-### 2. 데이터 구조 변경 및 전처리 확인
+### 2-2. 데이터 구조 변경 및 전처리 확인
 
 <div align="center">
 
 | **[ 기존 데이터 구조 ]** | **[ 변경 후 데이터 구조 ]** |
 | :--- | :--- |
-| <table><tr><th>No</th><th>Column</th><th>Count</th><th>Dtype</th></tr><tr><td>0</td><td>**ID**</td><td>271,116</td><td>int64</td></tr><tr><td>1</td><td>Name</td><td>271,116</td><td>str</td></tr><tr><td>2</td><td>Sex</td><td>271,116</td><td>str</td></tr><tr><td>3</td><td>Age</td><td>261,642</td><td>float</td></tr><tr><td>4</td><td>Height</td><td>210,945</td><td>float</td></tr><tr><td>5</td><td>Weight</td><td>208,241</td><td>float</td></tr><tr><td>6</td><td>Team</td><td>271,116</td><td>str</td></tr><tr><td>7</td><td>NOC</td><td>271,116</td><td>str</td></tr><tr><td>8</td><td>Games</td><td>271,116</td><td>str</td></tr><tr><td>9</td><td>Year</td><td>271,116</td><td>int64</td></tr><tr><td>10</td><td>Season</td><td>271,116</td><td>str</td></tr><tr><td>11</td><td>City</td><td>271,116</td><td>str</td></tr><tr><td>12</td><td>Sport</td><td>271,116</td><td>str</td></tr><tr><td>13</td><td>Event</td><td>271,116</td><td>str</td></tr><tr><td>14</td><td>Medal</td><td>39,783</td><td>str</td></tr></table> | <table><tr><th>No</th><th>Column</th><th>Count</th><th>Dtype</th></tr><tr><td>0</td><td>**ID**</td><td>269,731</td><td>int64</td></tr><tr><td>1</td><td>Name</td><td>269,731</td><td>str</td></tr><tr><td>2</td><td>Sex</td><td>269,731</td><td>str</td></tr><tr><td>3</td><td>Age</td><td>260,416</td><td>float</td></tr><tr><td>4</td><td>Height</td><td>210,917</td><td>float</td></tr><tr><td>5</td><td>Weight</td><td>208,204</td><td>float</td></tr><tr><td>6</td><td>Team</td><td>269,731</td><td>str</td></tr><tr><td>7</td><td>NOC</td><td>269,731</td><td>str</td></tr><tr><td>8</td><td>Games</td><td>269,731</td><td>str</td></tr><tr><td>9</td><td>Year</td><td>269,731</td><td>int64</td></tr><tr><td>10</td><td>Season</td><td>269,731</td><td>str</td></tr><tr><td>11</td><td>City</td><td>269,731</td><td>str</td></tr><tr><td>12</td><td>Sport</td><td>269,731</td><td>str</td></tr><tr><td>13</td><td>Event</td><td>269,731</td><td>str</td></tr><tr><td>14</td><td>Medal</td><td>39,772</td><td>str</td></tr><tr><td>15</td><td>**host_NOC**</td><td>269,731</td><td>str</td></tr><tr><td>16</td><td>**is_host**</td><td>269,731</td><td>bool</td></tr></table> |
+| <table><tr><th>No</th><th>Column</th><th>Count</th><th>Dtype</th></tr><tr><td>0</td><td>**ID**</td><td>271,116</td><td>int64</td></tr><tr><td>1</td><td>Name</td><td>271,116</td><td>str</td></tr><tr><td>2</td><td>Sex</td><td>271,116</td><td>str</td></tr><tr><td>3</td><td>Age</td><td>261,642</td><td>float</td></tr><tr><td>4</td><td>Height</td><td>210,945</td><td>float</td></tr><tr><td>5</td><td>Weight</td><td>208,241</td><td>float</td></tr><tr><td>6</td><td>Team</td><td>271,116</td><td>str</td></tr><tr><td>7</td><td>NOC</td><td>271,116</td><td>str</td></tr><tr><td>8</td><td>Games</td><td>271,116</td><td>str</td></tr><tr><td>9</td><td>Year</td><td>271,116</td><td>int64</td></tr><tr><td>10</td><td>Season</td><td>271,116</td><td>str</td></tr><tr><td>11</td><td>City</td><td>271,116</td><td>str</td></tr><tr><td>12</td><td>Sport</td><td>271,116</td><td>str</td></tr><tr><td>13</td><td>Event</td><td>271,116</td><td>str</td></tr><tr><td>14</td><td>Medal</td><td>39,783</td><td>str</td></tr></table> | <table><tr><th>No</th><th>Column</th><th>Count</th><th>Dtype</th></tr><tr><td>0</td><td>**ID**</td><td>269,731</td><td>int64</td></tr><tr><td>1</td><td>Name</td><td>269,731</td><td>str</td></tr><tr><td>2</td><td>Sex</td><td>269,731</td><td>str</td></tr><tr><td>3</td><td>Age</td><td>260,416</td><td>float</td></tr><tr><td>4</td><td>Height</td><td>210,917</td><td>float</td></tr><tr><td>5</td><td>Weight</td><td>208,204</td><td>float</td></tr><tr><td>6</td><td>Team</td><td>269,731</td><td>str</td></tr><tr><td>7</td><td>NOC</td><td>269,731</td><td>str</td></tr><tr><td>8</td><td>Games</td><td>269,731</td><td>str</td></tr><tr><td>9</td><td>Year</td><td>269,731</td><td>int64</td></tr><tr><td>10</td><td>Season</td><td>269,731</td><td>str</td></tr><tr><td>11</td><td>City</td><td>269,731</td><td>str</td></tr><tr><td>12</td><td>Sport</td><td>269,731</td><td>str</td></tr><tr><td>13</td><td>Event</td><td>269,731</td><td>str</td></tr><tr><td>14</td><td>Medal</td><td>39,772</td><td>str</td></tr><tr><td>15</td><td>**host_NOC**</td><td>269,731</td><td>str</td></tr><tr><td>16</td><td>**is_host**</td><td>269,731</td><td>bool</td></tr><tr><td>17</td><td>gdp_per_capita</td><td>269,731</td><td>float64</td></tr><tr><td>18</td><td>Status</td><td>269,731</td><td>str</td></tr></table> |
 
 </div>
 
+---
+
+## 3. 📌가설 설정 (Hypothesis)
+**올림픽 개최국은 평소보다 유의미하게 높은 메달 성과를 거둘 것이다.**
+- 세부가설 1: 개최국 시 개최국 특혜로 인해 선수단 규모가 증가하는데, 메달의 총량 증가는 선수단 규모의 확장에 의한 것이다.
+- 세부가설 2: 수영이나 육상처럼 기록으로 승부하는 '측정 종목'보다는 심판의 심사로 주관적인 판단이 개입이 되는 '심사 종목'에서 개최국 이점이 크게 나타날 것이다.
+- 세부가설 3: 영구적인 체육 경쟁력의 상승이 아니라 일시적 스파이크 현상일 것이다.
 
 
-### 3. 📌기술 통계 및 데이터 요약
+#### 3-3. 외부 결합 변수 (Economic Indicators)
+- **gdp_per_capita (1인당 GDP):** 데이터셋 내 최소 $20에서 최대 $110,000 이상까지 매우 넓은 범위를 보입니다. 특히 1960년대 이후 데이터가 존재하는 26개 개최 사례를 정밀 분석 대상으로 추출하였습니다.
+- **Status (경제 수준 분류):**
+  - **선진국 (Developed):** 당해 연도 GDP 상위 25% 국가들로, 개최 시 평균 50개 이상의 메달을 획득하는 '고효율 집단'입니다.
+  - **개발도상국 (Developing):** 나머지 75% 국가들로, 평소 성적은 낮으나 개최 시 메달 획득 수가 약 3.6배 폭증하는 '고성장 집단'임을 확인하였습니다.
 
-#### 3-1. 수치형 변수
-- **ID 및 Year 제외:** 분석적 의미가 낮은 고유 식별 번호와 연도 데이터는 통계 대상에서 제외하였습니다.
-- **Age (나이):** 중앙값이 평균값보다 약간 작게 나타나, 데이터 분포가 오른쪽으로 살짝 쏠려(Right-skewed) 있음을 확인하였습니다.
-- **Height & Weight (신체 조건):** 중앙값과 평균값이 거의 일치하여 정규 분포에 가까운 고른 분포를 보이고 있습니다.
-
-![Describe.png](image/Describe.png)
-
-#### 3-2. 범주형 변수
-- **Name (선수 이름):** 이름의 중복 빈도가 높습니다. 이는 한 선수가 여러 종목에 참여하거나 여러 회차의 올림픽에 출전했음을 나타냅니다. (Full Name 기재 방식으로 동명이인 가능성은 매우 낮음)
-- **Sex (성별):** 남성 선수의 수가 여성 선수보다 약 **2.5배** 더 많습니다.
-- **Team vs NOC (국적 코드):** 초창기 연합팀 제도 등으로 인해 `Team` 컬럼의 고유값이 `NOC`보다 많습니다. 정확한 국가별 분석을 위해서는 고유 코드인 **NOC** 컬럼을 활용하는 것이 적절합니다.
-- **참가 기록:** **2000년 시드니 올림픽**에 가장 많은 선수가 참가하였습니다.
-- **Season (시즌):** 하계 올림픽 참가자 수가 동계 올림픽에 비해 압도적으로 많습니다.
-- **City (개최 도시):** **런던**에서 총 3회(1908, 1948, 2012)로 가장 많이 개최되었으며, 해당 도시에서는 육상 종목이 가장 활발하게 열렸습니다.
-- **Sport (종목):** 전체 참가 선수 기록 중 **남자 축구** 종목의 데이터가 가장 많습니다.
-- **Medal (메달):** 금, 은, 동 중 **금메달**의 수여 기록이 가장 빈번하게 나타납니다.
-
-![Describe2.png](image/Describe2.png)
 
 ---
 ## 4. 🔍 주요 분석 질문 및 결과
+Q1. 올림픽 개최는 실제로 메달 획득 수에 유의미한 차이를 만드는가?
+- 결과: 개최국은 원정 경기 대비 평균 **약 2배(150%~210%)**의 메달을 더 획득합니다. 특히 인프라 적응력과 기후 영향이 큰 동계 올림픽에서 이 효과가 더욱 두드러지게 나타났습니다.
+
+Q2. 개최국 효과는 대회 당해에만 국한되는 단기적인 현상인가?
+- 결과: 개최 8년 전(유치 결정 시점)부터 국가적 투자가 시작되며 성적이 상승하는 '빌드업(Build-up)' 현상이 관찰되었습니다. 대회 종료 후 성적은 다소 하락하지만, 개최 이전과 비교했을 때 전체적인 스포츠 경쟁력(체급)이 상향 평준화된 상태를 유지했습니다.
+
+Q3. 판정이 개입되는 종목에서 개최국이 더 유리한가?
+- 결과: 가설과 달리, 심사 종목(Subjective)보다 기록 종목(Objective)에서 개최국의 성적 상승 폭이 더 컸습니다. 이는 개최국 프리미엄이 단순한 판정 이득이 아니라, 메달 비중이 높은 기록 종목에 대한 전략적 자본 투입과 스포츠 과학의 결실임을 시사합니다.
+
+Q4. 국가의 경제적 수준(GDP)에 따라 개최국 효과의 양상이 다른가?
+- 결과: 선진국은 자본력을 바탕으로 압도적인 메달 절대량을 확보(평균 50.5개)하며 우위를 증명하는 반면, 개발도상국은 개최 시 성적이 357% 급증하는 극적인 레버리지 효과를 보였습니다. 경제력은 성적의 안정적인 하한선을 제공하고, 개최 여부는 성적의 폭발적인 상한선을 결정합니다.
+
 ---
 ## 5.💡 결론 및 시사점
 ### 5-1. 개최국 여부에 따른 메달 획득 수 비교
@@ -65,3 +70,7 @@
 판정의 주관성보다, 자본이 투입된 기록 종목에서 버프가 더 정직하게 나타난다"
 분석: 종목을 **Objective(명확한 기록 존재), Subjective(심판의 주관적 점수로 채점), Others(복합적)**로 분류했을 때, 의외로 Objective 종목의 상승률이 가장 높게 나타났다.
 인사이트: 이는 개최국 버프가 단순히 '심판의 호의'에서 오는 노이즈가 아니라, 메달이 대량으로 걸린 기록 종목에 대한 국가적 자본 투여와 스포츠 과학의 집중(Optimization) 결과임을 시사한다.
+### 5-4. 경제적 수준(GDP)에 따른 개최국 시너지 분석
+경제력은 메달의 하한선을 결정하고, 개최 여부는 상한선을 결정한다
+분석: 1인당 GDP 기준 선진국(상위 25%)과 개발도상국(하위 75%)의 개최 효과를 대조한 결과, 일반 참가 시 선진국(19.2개)이 개도국(7.6개)보다 약 2.5배 높은 기초 체력을 보유했다. 개최 시 **개발도상국은 357%**라는 경이적인 성장률(레버리지)을 기록했으며, 선진국은 평균 50.5개라는 압도적 정점을 찍었다.
+인사이트: 올림픽 성적은 자본의 절대량(GDP)뿐만 아니라 자본의 투입 시점(개최 시기)에 좌우된다. 개발도상국에게 개최는 '성장의 퀀텀 점프' 기회이며, 선진국에게는 '스포츠 패권의 공고화' 기회로 작용한다.
